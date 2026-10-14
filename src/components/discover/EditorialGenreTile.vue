@@ -26,21 +26,31 @@
 import { itemArtwork } from "@/components/discover/editorialArtwork";
 import { handleMediaItemClick } from "@/helpers/utils";
 import type { Genre } from "@/plugins/api/interfaces";
+import { $t } from "@/plugins/i18n";
+import router from "@/plugins/router";
 import { computed } from "vue";
 
 interface Props {
-  item: Genre;
+  // Omit to render a "More" tile that links to the full genres page
+  item?: Genre;
 }
 const props = defineProps<Props>();
 
 const genreBanner = new URL("@/assets/logo/banner-no-logo.png", import.meta.url)
   .href;
 
-const iconImage = computed(() => itemArtwork(props.item, 320).image);
-const displayName = computed(() => props.item.name);
+const iconImage = computed(() =>
+  props.item ? itemArtwork(props.item, 320).image : undefined,
+);
+const displayName = computed(() => props.item?.name ?? $t("more"));
 
-const onClick = (e: MouseEvent) =>
+const onClick = (e: MouseEvent) => {
+  if (!props.item) {
+    router.push({ name: "genres" });
+    return;
+  }
   handleMediaItemClick(props.item, e.clientX, e.clientY);
+};
 </script>
 
 <style scoped>

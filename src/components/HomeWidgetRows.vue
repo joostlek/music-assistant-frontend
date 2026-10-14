@@ -238,6 +238,7 @@
                 :key="genre.uri"
                 :item="genre"
               />
+              <EditorialGenreTile />
             </div>
           </section>
         </div>
@@ -707,8 +708,9 @@ const loadRecommendations = async () => {
   recentlyPlayed.value = recent;
 };
 
-// "Browse by genre": show the 8 genres with the most linked media items
-// (most relevant to the user) rather than the first 8 alphabetically.
+// "Browse by genre": show the 7 genres with the most linked media items
+// (most relevant to the user) rather than the first 7 alphabetically.
+// The 8th tile is a "More" link to the full genres page.
 const loadGenres = async () => {
   const all = await api
     .getLibraryGenres({ hide_empty: true })
@@ -723,7 +725,7 @@ const loadGenres = async () => {
   } catch {
     // counts endpoint unavailable on older servers → keep server (name) order
   }
-  genres.value = ranked.slice(0, 8);
+  genres.value = ranked.slice(0, 7);
 };
 
 let isUnmounted = false;
